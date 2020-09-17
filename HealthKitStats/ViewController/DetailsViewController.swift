@@ -34,14 +34,37 @@ class DetailsViewController: UIViewController {
 
 extension DetailsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return equivalentStatsManager.completedResults.count
+        
+        if(section == 0){
+            return 1
+        } else {
+            return equivalentStatsManager.completedResults.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        if(indexPath.section == 0) {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "StatsCell", for: indexPath)
+            cell.textLabel!.text = statsArrayItem?.name
+            cell.detailTextLabel!.text = statsArrayItem?.strValue
+            
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
 
-        cell.textLabel!.text = equivalentStatsManager.completedResults[indexPath.row].description
-        cell.detailTextLabel!.text = String(equivalentStatsManager.completedResults[indexPath.row].result)
-        return cell
+            cell.textLabel!.text = equivalentStatsManager.completedResults[indexPath.row].strResult
+    //        cell.detailTextLabel!.text = String(equivalentStatsManager.completedResults[indexPath.row].result)
+            return cell
+        }
+        
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        let titles = ["Your Statistics:", "Equivalent Stats:"]
+        return titles[section]
     }
 }
