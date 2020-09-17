@@ -9,9 +9,23 @@
 import Foundation
 import HealthKit
 
+struct statsObject {
+    var name: String = ""
+    var value: String = ""
+}
+
+protocol StatsManagerProtocol {
+    func updateTableView()
+}
+
 class StatsManager {
     
     let healthStore = HKHealthStore()
+    
+    var statsArray: [[statsObject]] = [[], []]
+    var statsArrayTitles = ["Distance", "Other"]
+    
+    var delegate: StatsManagerProtocol?
     
     func checkAuth(){
         // Set required properties to be read from HealthKit https://developer.apple.com/documentation/healthkit/hkquantitytypeidentifier
@@ -29,16 +43,38 @@ class StatsManager {
                 // This runs if auth is ok
                 self.fetchData(identifier: HKSampleType.quantityType(forIdentifier: .distanceWalkingRunning)!, unit: "meter", completion: {(value) -> Void in
                     print("Meters \(value)")
+                    self.addStatsObject(name: "Distance Walk/Running in M:", value: String(Int(value)))
+                })
+                
+                self.fetchData(identifier: HKSampleType.quantityType(forIdentifier: .distanceWalkingRunning)!, unit: "mile", completion: {(value) -> Void in
+                    print("Meters \(value)")
+                    self.addStatsObject(name: "Distance Walk Running in Miles:", value: String(Int(value)))
                 })
                 
                 self.fetchData(identifier: HKSampleType.quantityType(forIdentifier: .stepCount)!, unit: "count", completion: {(value) -> Void in
                     print("Steps \(value)")
+                    self.addStatsObject(name: "👟Step Count:", value: String(Int(value)))
                 })
+                
                 self.fetchData(identifier: HKSampleType.quantityType(forIdentifier: .flightsClimbed)!, unit: "count", completion: {(value) -> Void in
                     print("Flights \(value)")
+                    self.addStatsObject(name: "No. of Flights:", value: String(Int(value)))
                 })
             }
         }
+    }
+    
+    func addStatsObject(name: String, value: String) {
+        //TODO: Add error handling and text formatting here
+        var newStatsObject = statsObject()
+        newStatsObject.name = name
+        newStatsObject.value = value
+        if(name == "Distance Walk Running in Miles:") {
+            statsArray[0].append(newStatsObject)
+        } else {
+            statsArray[1].append(newStatsObject)
+        }
+        delegate?.updateTableView()
     }
     
     func fetchData(identifier: HKQuantityType, unit: String, completion: @escaping (_ value:Double) -> ()){
@@ -67,20 +103,29 @@ class StatsManager {
                         
                         var value: Double = 0
                         
-                        if (unit == "meter") {
-                            value = quantity.doubleValue(for: HKUnit.meter())
-                        } else if (unit == "count"){
+                        switch(unit) {
+                        case "count":
                             value = quantity.doubleValue(for: HKUnit.count())
+                            break
+                        case "meter":
+                            value = quantity.doubleValue(for: HKUnit.meter())
+                            break
+                        case "mile":
+                            value = quantity.doubleValue(for: HKUnit.mile())
+                            break
+                        default:
+                            print("Error unit not specified")
+                            fatalError("Unit not specified")
                         }
                         
                         total += value
-//                        let date = statistics.endDate
-//                        print("\(date): value = \(value)")
+                        // Get date for each day if required
+                        //let date = statistics.endDate
+                        //print("\(date): value = \(value)")
                     }
                 } //end block
-                completion(total)
+                completion(total) // return after loop has ran
             } //end if let
-//            print("Value \(total)")
         }
         healthStore.execute(stepsQuery)
     }
