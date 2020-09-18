@@ -26,6 +26,7 @@ class DetailsViewController: UIViewController {
         print("Details View Loaded")
         self.title = navTitle
         
+        // Pass in stat value and the unit it is measured in
         if let safeValue = statsArrayItem?.rawValue, let safeUnits = statsArrayItem?.units {
             equivalentStatsManager.calculate(value: safeValue, unit: safeUnits)
         }
@@ -34,7 +35,7 @@ class DetailsViewController: UIViewController {
 
 extension DetailsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
+        // Statically define number of items in each section - top section only has the clicked on property
         if(section == 0){
             return 1
         } else {
@@ -53,7 +54,6 @@ extension DetailsViewController: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
 
             cell.textLabel!.text = equivalentStatsManager.completedResults[indexPath.row].strResult
-    //        cell.detailTextLabel!.text = String(equivalentStatsManager.completedResults[indexPath.row].result)
             return cell
         }
         

@@ -40,7 +40,7 @@ class StatsManager {
                                     HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.appleExerciseTime)!,
                                     HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.distanceSwimming)!,
                                     HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.swimmingStrokeCount)!,
-                                    HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.pushCount)!,
+                                    HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.pushCount)!, 
                                     HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.distanceWheelchair)!,
                                     HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.distanceCycling)!,
                                     HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.distanceDownhillSnowSports)!,
@@ -186,6 +186,9 @@ class StatsManager {
         }
     }
     
+    /*
+     Add statsobject to array and sort the array based on position variable
+     */
     func addStatsObject(category: Int, position: Int, name: String, strValue: String, rawValue: Double, units: String) {
         //TODO: Add error handling and text formatting here
         var newStatsObject = statsObject()
