@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="WbA-Dn-lag">
-                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="808"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" textLabel="BJ0-fB-2Fy" detailTextLabel="D19-ZW-MA5" style="IBUITableViewCellStyleValue1" id="bu5-Lf-fH5">
@@ -52,12 +52,18 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="WbA-Dn-lag" secondAttribute="trailing" id="Sxg-dF-dNr"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="WbA-Dn-lag" secondAttribute="bottom" id="ZUH-E1-Zpu"/>
+                            <constraint firstAttribute="bottom" secondItem="WbA-Dn-lag" secondAttribute="bottom" id="ZUH-E1-Zpu"/>
                             <constraint firstItem="WbA-Dn-lag" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="hpf-Ea-eMk"/>
                             <constraint firstItem="WbA-Dn-lag" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="nkX-tF-pob"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Total Stats" id="pYw-IN-lxd"/>
+                    <navigationItem key="navigationItem" title="Total Stats" id="pYw-IN-lxd">
+                        <barButtonItem key="rightBarButtonItem" title="Item" id="31P-hO-CTR">
+                            <connections>
+                                <action selector="timeButtonClicked:" destination="BYZ-38-t0r" id="Y9y-rH-Yma"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="tableView" destination="WbA-Dn-lag" id="GgX-jS-88g"/>
                         <segue destination="qgS-6y-96P" kind="show" identifier="showDetails" id="wEV-8i-dcG"/>
@@ -76,7 +82,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="HnL-4Q-TP6">
-                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="808"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" textLabel="DxZ-o9-NAN" style="IBUITableViewCellStyleDefault" id="fbT-Bx-Twt">
                                         <rect key="frame" x="0.0" y="28" width="414" height="43.5"/>
@@ -128,7 +134,7 @@
                         <constraints>
                             <constraint firstItem="HnL-4Q-TP6" firstAttribute="leading" secondItem="UtJ-25-l0F" secondAttribute="leading" id="5vw-Z1-O51"/>
                             <constraint firstItem="UtJ-25-l0F" firstAttribute="trailing" secondItem="HnL-4Q-TP6" secondAttribute="trailing" id="O85-0P-WI6"/>
-                            <constraint firstItem="UtJ-25-l0F" firstAttribute="bottom" secondItem="HnL-4Q-TP6" secondAttribute="bottom" id="SmD-WL-IKE"/>
+                            <constraint firstAttribute="bottom" secondItem="HnL-4Q-TP6" secondAttribute="bottom" id="SmD-WL-IKE"/>
                             <constraint firstItem="HnL-4Q-TP6" firstAttribute="top" secondItem="UtJ-25-l0F" secondAttribute="top" id="gmu-Gd-Z9J"/>
                         </constraints>
                     </view>

@@ -9,7 +9,7 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    
     @IBOutlet weak var tableView: UITableView!
     
     let statsManager = StatsManager()
@@ -26,6 +26,26 @@ class ViewController: UIViewController {
         tableView.delegate = self
         
         statsManager.checkAuth()
+    }
+    @IBAction func timeButtonClicked(_ sender: UIBarButtonItem) {
+        print("time button clicked")
+        showChangeTime()
+    }
+    
+    func showChangeTime() {
+        
+        //TODO: Actionsheet causes a constraint break - this is a bug and should be fixed in a updated - can be fixed by disabling animation - https://stackoverflow.com/questions/55653187/swift-default-alertviewcontroller-breaking-constraints
+        let alert = UIAlertController(title: "Change Selected Time", message: "Change the selected time period for the stats.", preferredStyle: .actionSheet)
+        
+        alert.addAction(UIAlertAction(title: "Edit", style: .default, handler: { (_) in
+            print("User click Edit button")
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .default) { (action) in
+            // Empty on purpose
+        })
+        
+        present(alert, animated: true, completion: nil)
     }
     
     // Runs before a segue is performed so I can set variables in the VC before it is displayed
@@ -49,7 +69,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-
+        
         cell.textLabel!.text = statsManager.statsArray[indexPath.section][indexPath.row].name
         cell.detailTextLabel!.text = statsManager.statsArray[indexPath.section][indexPath.row].strValue
         return cell

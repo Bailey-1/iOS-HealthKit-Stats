@@ -34,7 +34,7 @@ class EquivalentObjects {
         self.wholeNum = wholeNum
         self.description = description
         self.units = units
-        self.size = size
+        self.size = size 
     }
 }
 
@@ -54,10 +54,6 @@ class EquivalentStatsManager {
     }
     
     func milesStats(value: Double) -> [EquivalentObjects]{
-        
-        struct test {
-            
-        }
     
         return [
             EquivalentObjects(rawValue: value, wholeNum: true, description: "$ Standard Marathons", units: "miles", size: 26.2),
