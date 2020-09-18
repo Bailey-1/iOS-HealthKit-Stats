@@ -25,7 +25,7 @@ class ViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         
-        statsManager.checkAuth()
+        statsManager.checkAuth(duration: 0)
     }
     @IBAction func timeButtonClicked(_ sender: UIBarButtonItem) {
         print("time button clicked")
@@ -37,12 +37,39 @@ class ViewController: UIViewController {
         //TODO: Actionsheet causes a constraint break - this is a bug and should be fixed in a updated - can be fixed by disabling animation - https://stackoverflow.com/questions/55653187/swift-default-alertviewcontroller-breaking-constraints
         let alert = UIAlertController(title: "Change Selected Time", message: "Change the selected time period for the stats.", preferredStyle: .actionSheet)
         
-        alert.addAction(UIAlertAction(title: "Edit", style: .default, handler: { (_) in
-            print("User click Edit button")
+        alert.addAction(UIAlertAction(title: "1 Day", style: .default, handler: { (_) in
+            print("1 Day Selected")
+            self.title = "1 Day Stats"
+            self.statsManager.checkAuth(duration: 1)
         }))
         
-        alert.addAction(UIAlertAction(title: "Cancel", style: .default) { (action) in
+        alert.addAction(UIAlertAction(title: "1 Week (7D)", style: .default, handler: { (_) in
+            print("1 Week Selected")
+            self.title = "1 Week Stats"
+            self.statsManager.checkAuth(duration: 7)
+        }))
+        
+        alert.addAction(UIAlertAction(title: "1 Month (30D)", style: .default, handler: { (_) in
+            print("1 Month Selected")
+            self.title = "1 Month Stats"
+            self.statsManager.checkAuth(duration: 30)
+        }))
+        
+        alert.addAction(UIAlertAction(title: "1 Year (365D)", style: .default, handler: { (_) in
+            print("1 Year Selected")
+            self.title = "1 Year Stats"
+            self.statsManager.checkAuth(duration: 365)
+        }))
+        
+        alert.addAction(UIAlertAction(title: "All Time", style: .default, handler: { (_) in
+            print("All Time Selected")
+            self.title = "All Time Stats"
+            self.statsManager.checkAuth(duration: 0)
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel) { (action) in
             // Empty on purpose
+            print("Actionsheet Dismissed")
         })
         
         present(alert, animated: true, completion: nil)

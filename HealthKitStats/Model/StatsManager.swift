@@ -14,6 +14,7 @@ struct statsObject {
     var strValue: String = "" // For displaying raw value
     var rawValue: Double = 0.0 // For calculating with raw value
     var units: String = "" // For determining comparisons
+    var position: Int = 0;
 }
 
 protocol StatsManagerProtocol {
@@ -30,7 +31,7 @@ class StatsManager {
     
     var delegate: StatsManagerProtocol?
     
-    func checkAuth(){
+    func checkAuth(duration: Int){
         // Set required properties to be read from HealthKit https://developer.apple.com/documentation/healthkit/hkquantitytypeidentifier
         let healthKitTypes: Set = [ HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!,
                                     HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.flightsClimbed)!,
@@ -54,82 +55,163 @@ class StatsManager {
             } else {
                 // This runs if auth is ok
                 
+                self.statsArray = [[],[],[],[],[],[]]
+                
+                //TODO: Make nicer area for data modelling - new file or something
                 // Activity totals
-                self.fetchData(identifier: HKSampleType.quantityType(forIdentifier: .stepCount)!, unit: "count", completion: {(value) -> Void in
+                self.fetchData(identifier: HKSampleType.quantityType(forIdentifier: .stepCount)!, unit: "count", duration: duration, completion: {(value) -> Void in
                     print("Steps \(value)")
-                    self.addStatsObject(category: 0, name: "👟 Step Count:", strValue: "\(Int(value)) Steps", rawValue: value, units: "steps")
+                    self.addStatsObject(
+                        category: 0,
+                        position: 0,
+                        name: "👟 Steps:",
+                        strValue: "\(Int(value)) Steps",
+                        rawValue: value,
+                        units: "steps")
                 })
                 
-                self.fetchData(identifier: HKSampleType.quantityType(forIdentifier: .flightsClimbed)!, unit: "count", completion: {(value) -> Void in
+                self.fetchData(identifier: HKSampleType.quantityType(forIdentifier: .flightsClimbed)!, unit: "count", duration: duration, completion: {(value) -> Void in
                     print("Flights \(value)")
-                    self.addStatsObject(category: 0, name: "🏢 No. of Flights of Stairs:", strValue: "\(Int(value)) Flights", rawValue: value, units: "flights")
+                    self.addStatsObject(
+                        category: 0,
+                        position: 1,
+                        name: "🏢 Flights of Stairs:",
+                        strValue: "\(Int(value)) Flights",
+                        rawValue: value,
+                        units: "flights")
                 })
                 
-                self.fetchData(identifier: HKSampleType.quantityType(forIdentifier: .appleStandTime)!, unit: "hour", completion: {(value) -> Void in
+                self.fetchData(identifier: HKSampleType.quantityType(forIdentifier: .appleStandTime)!, unit: "hour", duration: duration, completion: {(value) -> Void in
                     print("Time Standing \(value)")
-                    self.addStatsObject(category: 0, name: "🧍‍♂️ Time Standing:", strValue: "\(Int(value)) Hours", rawValue: value, units: "hours")
+                    self.addStatsObject(
+                        category: 0,
+                        position: 2,
+                        name: "🧍‍♂️ Time Standing:",
+                        strValue: "\(Int(value)) Hours",
+                        rawValue: value,
+                        units: "hours")
                 })
                 
-                // Walking
-                self.fetchData(identifier: HKSampleType.quantityType(forIdentifier: .distanceWalkingRunning)!, unit: "mile", completion: {(value) -> Void in
-                    print("Meters \(value)")
-                    self.addStatsObject(category: 1, name: "🏃‍♀️ Distance Walk/Running:", strValue: "\(Int(value)) Miles", rawValue: value, units: "miles")
-                })
-                
-                self.fetchData(identifier: HKSampleType.quantityType(forIdentifier: .appleExerciseTime)!, unit: "hour", completion: {(value) -> Void in
+                self.fetchData(identifier: HKSampleType.quantityType(forIdentifier: .appleExerciseTime)!, unit: "hour", duration: duration, completion: {(value) -> Void in
                     print("Hour \(value)")
-                    self.addStatsObject(category: 1, name: "⏱ Time exercising:", strValue: "\(Int(value)) Hours", rawValue: value, units: "hours")
+                    self.addStatsObject(
+                        category: 0,
+                        position: 3,
+                        name: "⏱ Time Exercising:",
+                        strValue: "\(Int(value)) Hours",
+                        rawValue: value,
+                        units: "hours")
+                })
+
+                // Walking
+                self.fetchData(identifier: HKSampleType.quantityType(forIdentifier: .distanceWalkingRunning)!, unit: "mile", duration: duration, completion: {(value) -> Void in
+                    print("Meters \(value)")
+                    self.addStatsObject(
+                        category: 1,
+                        position: 0,
+                        name: "🏃‍♀️ Distance Walk/Running:",
+                        strValue: "\(Int(value)) Miles",
+                        rawValue: value,
+                        units: "miles")
                 })
                 
                 //Swimming
-                self.fetchData(identifier: HKSampleType.quantityType(forIdentifier: .swimmingStrokeCount)!, unit: "count", completion: {(value) -> Void in
-                    print("Count \(value)")
-                    self.addStatsObject(category: 2, name: "🏊‍♂️ Swimming Stroke Count:", strValue: "\(Int(value)) Strokes", rawValue: value, units: "strokes")
+                self.fetchData(identifier: HKSampleType.quantityType(forIdentifier: .distanceSwimming)!, unit: "miles", duration: duration, completion: {(value) -> Void in
+                    print("Miles \(value)")
+                    self.addStatsObject(
+                        category: 2,
+                        position: 0,
+                        name: "🌊 Distance Swimming:",
+                        strValue: "\(Int(value)) Miles",
+                        rawValue: value,
+                        units: "miles")
                 })
                 
-                self.fetchData(identifier: HKSampleType.quantityType(forIdentifier: .distanceSwimming)!, unit: "miles", completion: {(value) -> Void in
-                    print("Miles \(value)")
-                    self.addStatsObject(category: 2, name: "🌊 Swimming Distance:", strValue: "\(Int(value)) Miles", rawValue: value, units: "miles")
+                self.fetchData(identifier: HKSampleType.quantityType(forIdentifier: .swimmingStrokeCount)!, unit: "count", duration: duration, completion: {(value) -> Void in
+                    print("Count \(value)")
+                    self.addStatsObject(
+                        category: 2,
+                        position: 1,
+                        name: "🏊‍♂️ Swimming Strokes:",
+                        strValue: "\(Int(value)) Strokes",
+                        rawValue: value,
+                        units: "strokes")
                 })
                 
                 // Wheel chair use
-                self.fetchData(identifier: HKSampleType.quantityType(forIdentifier: .pushCount)!, unit: "count", completion: {(value) -> Void in
+                self.fetchData(identifier: HKSampleType.quantityType(forIdentifier: .distanceWheelchair)!, unit: "miles", duration: duration, completion: {(value) -> Void in
                     print("Count \(value)")
-                    self.addStatsObject(category: 3, name: "👩‍🦽 Wheel chair push count:", strValue: "\(Int(value)) Pushes", rawValue: value, units: "pushes")
+                    self.addStatsObject(
+                        category: 3,
+                        position: 0,
+                        name: "👨‍🦼 Distance of Wheel Chair:",
+                        strValue: "\(Int(value)) Miles",
+                        rawValue: value,
+                        units: "miles")
                 })
                 
-                self.fetchData(identifier: HKSampleType.quantityType(forIdentifier: .distanceWheelchair)!, unit: "miles", completion: {(value) -> Void in
+                self.fetchData(identifier: HKSampleType.quantityType(forIdentifier: .pushCount)!, unit: "count", duration: duration, completion: {(value) -> Void in
                     print("Count \(value)")
-                    self.addStatsObject(category: 3, name: "👨‍🦼 Wheel chair Distance:", strValue: "\(Int(value)) Miles", rawValue: value, units: "miles")
+                    self.addStatsObject(
+                        category: 3,
+                        position: 1,
+                        name: "👩‍🦽 Wheel Chair Pushes:",
+                        strValue: "\(Int(value)) Pushes",
+                        rawValue: value,
+                        units: "pushes")
                 })
                 
-                self.fetchData(identifier: HKSampleType.quantityType(forIdentifier: .distanceCycling)!, unit: "miles", completion: {(value) -> Void in
+                self.fetchData(identifier: HKSampleType.quantityType(forIdentifier: .distanceCycling)!, unit: "miles", duration: duration, completion: {(value) -> Void in
                     print("Count \(value)")
-                    self.addStatsObject(category: 4, name: "🚴‍♀️ Distance Cycling:", strValue: "\(Int(value)) Miles", rawValue: value, units: "miles")
+                    self.addStatsObject(
+                        category: 4,
+                        position: 0,
+                        name: "🚴‍♀️ Distance Cycling:",
+                        strValue: "\(Int(value)) Miles",
+                        rawValue: value,
+                        units: "miles")
                 })
                 
-                self.fetchData(identifier: HKSampleType.quantityType(forIdentifier: .distanceDownhillSnowSports)!, unit: "miles", completion: {(value) -> Void in
+                self.fetchData(identifier: HKSampleType.quantityType(forIdentifier: .distanceDownhillSnowSports)!, unit: "miles", duration: duration, completion: {(value) -> Void in
                     print("Count \(value)")
-                    self.addStatsObject(category: 5, name: "⛷ Distance Snow Sports:", strValue: "\(Int(value)) Miles", rawValue: value, units: "miles")
+                    self.addStatsObject(
+                        category: 5,
+                        position: 0,
+                        name: "⛷ Distance doing Snow Sports:",
+                        strValue: "\(Int(value)) Miles",
+                        rawValue: value,
+                        units: "miles")
                 })
             }
         }
     }
     
-    func addStatsObject(category: Int, name: String, strValue: String, rawValue: Double, units: String) {
+    func addStatsObject(category: Int, position: Int, name: String, strValue: String, rawValue: Double, units: String) {
         //TODO: Add error handling and text formatting here
         var newStatsObject = statsObject()
         newStatsObject.name = name
         newStatsObject.strValue = strValue
         newStatsObject.rawValue = rawValue
         newStatsObject.units = units
+        newStatsObject.position = position
         
-        statsArray[category].append(newStatsObject)
+        var newStatsArray = statsArray[category]
+        newStatsArray.append(newStatsObject)
         
+        statsArray[category] = newStatsArray.sorted(by: {$0.position < $1.position})
+
         delegate?.updateTableView()
     }
     
-    func fetchData(identifier: HKQuantityType, unit: String, completion: @escaping (_ value:Double) -> ()){
+    /*
+     fetchData - fetch data from healthkit
+     =====================================
+     identifier: property to fetch
+     unit: measuring unit to return result in
+     duration: over what time period (0 is all time, rest is number of days to include)
+     completion: run completed code when done
+     */
+    func fetchData(identifier: HKQuantityType, unit: String, duration: Int, completion: @escaping (_ value:Double) -> ()){
         let calendar = NSCalendar.current
         let interval = NSDateComponents()
         interval.day = 1
@@ -144,7 +226,14 @@ class StatsManager {
         // Set the results handler
         stepsQuery.initialResultsHandler = {query, results, error in
             let endDate = NSDate()
-            let startDate = Date(timeIntervalSince1970: 0)
+            
+            var startDate  = Date()
+            
+            if(duration == 0) {
+                startDate = Date(timeIntervalSince1970: 0)
+            } else {
+                startDate = Date().addingTimeInterval(TimeInterval(-3600 * 24 * duration))
+            }
             
             var total = 0.0;
             

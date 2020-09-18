@@ -47,6 +47,9 @@ class EquivalentStatsManager {
         case "miles":
             completedResults = milesStats(value: value)
             break
+        case "flights":
+            completedResults = flightsStats(value: value)
+            break
         default:
             fatalError("Error: Invalid Unit Type")
             break
@@ -62,4 +65,11 @@ class EquivalentStatsManager {
 
         ]
     }
+    
+    func flightsStats(value: Double) -> [EquivalentObjects]{
+        return [
+            EquivalentObjects(rawValue: value, wholeNum: true, description: "$ Burj Khalifas", units: "miles", size: 242), // 2909 stairs to level 160 divided by average number of stairs in a flight 12
+        ]
+    }
+
 }

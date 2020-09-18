@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Total Stats-->
+        <!--All Time Stats-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="HealthKitStats" customModuleProvider="target" sceneMemberID="viewController">
@@ -57,8 +57,8 @@
                             <constraint firstItem="WbA-Dn-lag" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="nkX-tF-pob"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Total Stats" id="pYw-IN-lxd">
-                        <barButtonItem key="rightBarButtonItem" title="Item" id="31P-hO-CTR">
+                    <navigationItem key="navigationItem" title="All Time Stats" id="pYw-IN-lxd">
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="calendar.badge.clock" catalog="system" id="31P-hO-CTR">
                             <connections>
                                 <action selector="timeButtonClicked:" destination="BYZ-38-t0r" id="Y9y-rH-Yma"/>
                             </connections>
@@ -167,6 +167,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="calendar.badge.clock" catalog="system" width="128" height="108"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
