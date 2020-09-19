@@ -103,6 +103,16 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         
         cell.textLabel!.text = statsManager.statsArray[indexPath.section][indexPath.row].name
         cell.detailTextLabel!.text = statsManager.statsArray[indexPath.section][indexPath.row].strValue
+        
+        print(statsManager.statsArray[indexPath.section][indexPath.row].units)
+        
+        if (statsManager.validUnits.contains(statsManager.statsArray[indexPath.section][indexPath.row].units)){
+            print("Unit is valid")
+            cell.accessoryType = .disclosureIndicator
+        } else {
+            cell.accessoryType = .none
+        }
+        
         return cell
     }
     
@@ -116,9 +126,14 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("row at \(indexPath[0]) clicked")
-        selectedCategory = indexPath[0]
-        selectedRow = indexPath[1]
-        self.performSegue(withIdentifier: K.segue.showDetails, sender: self)
+        
+        if(statsManager.validUnits.contains(statsManager.statsArray[indexPath.section][indexPath.row].units)){
+            selectedCategory = indexPath[0]
+            selectedRow = indexPath[1]
+            
+            self.performSegue(withIdentifier: K.segue.showDetails, sender: self)
+        }
+        
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }

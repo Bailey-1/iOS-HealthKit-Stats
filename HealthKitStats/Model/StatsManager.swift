@@ -25,11 +25,15 @@ class StatsManager {
     
     let healthStore = HKHealthStore()
     
+    var delegate: StatsManagerProtocol?
+
     // 2D array for each of the unique sections
     var statsArray: [[statsObject]] = [[],[],[],[],[],[]]
     var statsArrayTitles = ["Activity", "Walking / Running", "Swimming", "Wheelchair Use", "Cycling", "Downhill Sports"]
-    
-    var delegate: StatsManagerProtocol?
+
+    // Define valid units for comparison segue to be performed
+    // Only have in one place to change if a value for a unit will be shown the comparison page & cell decoration
+    let validUnits = ["miles", "flights", "hours"]
     
     func checkAuth(duration: Int){
         // Set required properties to be read from HealthKit https://developer.apple.com/documentation/healthkit/hkquantitytypeidentifier

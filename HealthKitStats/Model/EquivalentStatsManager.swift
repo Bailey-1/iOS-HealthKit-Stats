@@ -12,14 +12,17 @@ import Foundation
 class EquivalentObjects {
     var description: String
     var size: Double // The size of the measured unit e.g. length of a marathon
-    var isPercentage: Bool
     var rawValue: Double
+
+    var isPercentage: Bool
+    var isDecimal: Bool
     
-    init(rawValue: Double, isPercentage: Bool,description: String, size: Double) {
+    init(rawValue: Double, isPercentage: Bool, isDecimal: Bool, description: String, size: Double) {
         self.rawValue = rawValue
         self.isPercentage = isPercentage
         self.description = description
         self.size = size
+        self.isDecimal = isDecimal
     }
 
     // Calculate result of the division and return whole number or decimal depending on wholeNum variable
@@ -29,7 +32,11 @@ class EquivalentObjects {
         if (isPercentage) {
             result = String(format: "%.2f", (rawValue / size)*100)
         } else {
-            result = String(format: "%.0f", rawValue / size)
+            if(isDecimal){
+                result = String(format: "%.2f", rawValue / size)
+            } else {
+                result = String(format: "%.0f", rawValue / size)
+            }
         }
         return result
     }
@@ -42,10 +49,11 @@ class EquivalentObjects {
 
 class EquivalentStatsManager {
     
+    // define array for the vc to access
     var completedResults: [EquivalentObjects] = []
-    
+
+    // Use the value and the unit to create relevant comparison statistics
     func calculate(value: Double, unit: String){
-        // Check for the units so you know what the stat can be measured against eg miles vs flights of stairs
         switch(unit){
         case "miles":
             completedResults = milesStats(value: value)
@@ -68,29 +76,36 @@ class EquivalentStatsManager {
     
     /*
      Functions below return an array of equivalent stats objects which is calculated based on the unit and the value passed in.
+     
+     rawValue - the value of the user stat
+     isPercentage - changes if the returned answer is rawValue / size and then multiplied by 100
+     isDecimal - int or decimal to 2dp
+     description - text for the stat - dollar sign is replaced with calculated result
+     size - size of one statistic in the right unit e.g. 1 standard marathon is 26.2 miles
      */
     func milesStats(value: Double) -> [EquivalentObjects]{
         return [
-            EquivalentObjects(rawValue: value, isPercentage: false, description: "$ Standard Marathons", size: 26.2),
-            EquivalentObjects(rawValue: value, isPercentage: true, description: "Distance around $% of the Earth", size: 24901.451),
+            EquivalentObjects(rawValue: value, isPercentage: false, isDecimal: false, description: "$ Standard Marathons", size: 26.2),
+            EquivalentObjects(rawValue: value, isPercentage: true, isDecimal: true, description: "Distance around $% of the Earth", size: 24901.451),
+            EquivalentObjects(rawValue: value, isPercentage: true, isDecimal: true, description: "$% of the Great Wall of China", size: 13170),
+            EquivalentObjects(rawValue: value, isPercentage: false, isDecimal: false, description: "$ Panama Canal", size: 51),
         ]
     }
     
     func flightsStats(value: Double) -> [EquivalentObjects]{
         // Stairs in a flight = 12 steps
         return [
-            EquivalentObjects(rawValue: value, isPercentage: false, description: "$ Burj Khalifas", size: 242), // 2909 stairs to level 160
-            EquivalentObjects(rawValue: value, isPercentage: false, description: "$ Eiffel Towers", size: 56), // 674 steps to the 2nd floor
-            EquivalentObjects(rawValue: value, isPercentage: false, description: "$ Empire State Building", size: 131), // 1576 steps
+            EquivalentObjects(rawValue: value, isPercentage: false, isDecimal: false, description: "$ Burj Khalifas", size: 242), // 2909 stairs to level 160
+            EquivalentObjects(rawValue: value, isPercentage: false, isDecimal: false, description: "$ Eiffel Towers", size: 56), // 674 steps to the 2nd floor
+            EquivalentObjects(rawValue: value, isPercentage: false, isDecimal: false, description: "$ Empire State Building", size: 131), // 1576 steps
         ]
     }
 
     func hourStats(value: Double) -> [EquivalentObjects]{
-        // Stairs in a flight = 12 steps
         return [
-            EquivalentObjects(rawValue: value, isPercentage: false, description: "$ Days", size: 24), // 24 hours
-            EquivalentObjects(rawValue: value, isPercentage: false, description: "$ Weeks", size: 168), // 24 * 7
-            EquivalentObjects(rawValue: value, isPercentage: false, description: "$ Years", size: 8760), // 24 * 365
+            EquivalentObjects(rawValue: value, isPercentage: false, isDecimal: true, description: "$ Days", size: 24), // 24 hours
+            EquivalentObjects(rawValue: value, isPercentage: false, isDecimal: true, description: "$ Weeks", size: 168), // 24 * 7
+            EquivalentObjects(rawValue: value, isPercentage: false, isDecimal: true, description: "$ Years", size: 8760.00), // 24 * 365
         ]
     }
 }
