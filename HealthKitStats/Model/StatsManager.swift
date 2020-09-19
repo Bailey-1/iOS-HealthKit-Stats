@@ -11,10 +11,17 @@ import HealthKit
 
 struct statsObject {
     var name: String = "" // Description
-    var strValue: String = "" // For displaying raw value
     var rawValue: Double = 0.0 // For calculating with raw value
     var units: String = "" // For determining comparisons
     var position: Int = 0;
+    
+    var strValue: String {
+        let numFormatter = NumberFormatter()
+        numFormatter.numberStyle = .decimal
+        let tempRawValue = numFormatter.string(from: NSNumber(value: floor(rawValue)))
+//        (String(format: "%.0f", rawValue)
+        return "\(tempRawValue ?? "") \(units.capitalized)" // For displaying raw value
+    }
 }
 
 protocol StatsManagerProtocol {
@@ -197,7 +204,7 @@ class StatsManager {
         //TODO: Add error handling and text formatting here
         var newStatsObject = statsObject()
         newStatsObject.name = name
-        newStatsObject.strValue = strValue
+        //newStatsObject.strValue = strValue
         newStatsObject.rawValue = rawValue
         newStatsObject.units = units
         newStatsObject.position = position
